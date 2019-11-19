@@ -1,13 +1,16 @@
-FROM debian:jessie
+FROM debian:buster
 MAINTAINER Jan Broer <janeczku@yahoo.de>
 ENV DEBIAN_FRONTEND noninteractive
 
+RUN apt-get -qqy update
+RUN apt-get -qqy install gnupg1
+
 # Following 'How do I add or remove Dropbox from my Linux repository?' - https://www.dropbox.com/en/help/246
-RUN echo 'deb http://linux.dropbox.com/debian jessie main' > /etc/apt/sources.list.d/dropbox.list \
+RUN echo 'deb http://linux.dropbox.com/debian buster main' > /etc/apt/sources.list.d/dropbox.list \
 	&& apt-key adv --keyserver pgp.mit.edu --recv-keys 1C61A2656FB57B7E4DE0F4C1FC918B335044912E \
 	&& apt-get -qqy update \
 	# Note 'ca-certificates' dependency is required for 'dropbox start -i' to succeed
-	&& apt-get -qqy install ca-certificates curl python-gpgme dropbox \
+	&& apt-get -qqy install ca-certificates curl python3-gpg dropbox \
 	# Perform image clean up.
 	&& apt-get -qqy autoclean \
 	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
